@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace WeatherApplication
 {
 
+
 	public class WeatherInfo
 	{
 		public Coord coord { get; set; }
@@ -38,12 +39,15 @@ namespace WeatherApplication
 		public float temp_max { get; set; }
 		public int pressure { get; set; }
 		public int humidity { get; set; }
+		public int sea_level { get; set; }
+		public int grnd_level { get; set; }
 	}
 
 	public class Wind
 	{
 		public float speed { get; set; }
 		public int deg { get; set; }
+		public float gust { get; set; }
 	}
 
 	public class Clouds

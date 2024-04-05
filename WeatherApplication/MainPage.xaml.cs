@@ -37,7 +37,7 @@ namespace WeatherApplication
 
 		public async void GetTemperature(object parameters)
 		{
-			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=1f7b0a77bf23fecae05e9c7c63d98867"));
+			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
 			WeatherInfo responseTemperature = JsonConvert.DeserializeObject<WeatherInfo>(response);
 
 			if (responseTemperature != null)
