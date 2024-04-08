@@ -43,6 +43,7 @@ namespace WeatherApplication
 		public int grnd_level { get; set; }
 	}
 
+
 	public class Wind
 	{
 		public float speed { get; set; }

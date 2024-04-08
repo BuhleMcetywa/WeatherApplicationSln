@@ -22,13 +22,38 @@
             <Label
                 Text="{Binding LatestTemperature}"
                 Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
+                
+             />
 
             <Button 
                     Text="Get latest temperature"
                     Command="{Binding NewTemperatureCommand}"
-                    HorizontalOptions="Fill" />
+                    HorizontalOptions="Fill" 
+             />
+            
+            <Label
+                  Text="{Binding LatestHumidity}"
+                  Style="{StaticResource SubHeadline}"
+             />
+
+            <Button 
+               Text="Get latest humidity"
+               Command="{Binding NewHumidityCommand}"
+               HorizontalOptions="Fill" 
+             />
+
+            <Label
+                Text="{Binding LatestMax}"
+            
+             />
+
+            <Label
+                Text="{Binding LatestMin}"
+                />
+
+            <Label 
+                Text="{Binding LatestDescription}"
+                />
 
 
         </VerticalStackLayout>
