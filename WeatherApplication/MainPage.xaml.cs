@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Newtonsoft.Json;
 //using Xamarin.Google.Crypto.Tink.Signature;
-
+using System.Linq;
 
 
 namespace WeatherApplication
@@ -108,13 +108,14 @@ namespace WeatherApplication
 			}
 		}
 
-		/*public async void GetDescription(object parameters)
+		public async void GetDescription(object parameters)
 		{
 			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
 			WeatherInfo responseDescription = JsonConvert.DeserializeObject<WeatherInfo>(response);
 			if (responseDescription != null)
 			{
-				if (responseDescription.weather.Count =< 0)
+
+				if (responseDescription.weather.Count() >= 0)
 				{
 					LatestDescription = responseDescription.weather[0].description;
 
@@ -125,7 +126,7 @@ namespace WeatherApplication
 
 
 			}
-		}*/
+		}
 
 		public async void GetWindSpeed(object parameters)
 		{
