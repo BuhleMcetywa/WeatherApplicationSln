@@ -56,6 +56,7 @@ namespace WeatherApplication
 		public int all { get; set; }
 	}
 
+
 	public class Sys
 	{
 		public int type { get; set; }

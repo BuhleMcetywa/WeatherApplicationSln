@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Newtonsoft.Json;
-using Xamarin.Google.Crypto.Tink.Signature;
+//using Xamarin.Google.Crypto.Tink.Signature;
 
 
 
@@ -23,6 +23,10 @@ namespace WeatherApplication
 
 		private string _latestDescription;
 
+		private float _latestWindSpeed;
+
+		private GPSModule _gpsmodule;
+
 		public double LatestTemperature
 		{
 			get { return _latestTemperature; }
@@ -37,24 +41,23 @@ namespace WeatherApplication
 
 		public string LatestDescription { get { return _latestDescription; } set { _latestDescription = value; OnPropertyChanged(); } }
 
+		public float LatestWindSpeed { get { return _latestWindSpeed; } set { _latestWindSpeed = value; OnPropertyChanged(); } }
+
 
 		public ICommand NewTemperatureCommand { get; set; }
 		public ICommand NewHumidityCommand { get; set; }
-
+		
 
 		public MainPage()
 		{
 			InitializeComponent();
 			NewTemperatureCommand = new Command(GetTemperature);
 			NewHumidityCommand = new Command(GetHumidity);
-
 			_httpClient = new HttpClient();
 			_httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 			GetMax(_httpClient);
 			GetMin(_httpClient);
-
-
-
+			GPSModule module = new GPSModule();
 			BindingContext = this;
 
 		}
@@ -105,18 +108,35 @@ namespace WeatherApplication
 			}
 		}
 
-		public async void GetDescription(object parameters)
+		/*public async void GetDescription(object parameters)
 		{
 			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
 			WeatherInfo responseDescription = JsonConvert.DeserializeObject<WeatherInfo>(response);
 			if (responseDescription != null)
 			{
+				if (responseDescription.weather.Count =< 0)
+				{
+					LatestDescription = responseDescription.weather[0].description;
+
+				}
 				
 
 
 
 
 			}
+		}*/
+
+		public async void GetWindSpeed(object parameters)
+		{
+			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
+			WeatherInfo responseWindSpeed = JsonConvert.DeserializeObject<WeatherInfo>(response);
+
+			if (responseWindSpeed != null)
+			{
+				LatestWindSpeed = responseWindSpeed.wind.speed;
+			}
+
 		}
 
 	}
