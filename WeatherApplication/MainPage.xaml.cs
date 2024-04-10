@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Newtonsoft.Json;
-//using Xamarin.Google.Crypto.Tink.Signature;
 using System.Linq;
+
 
 
 namespace WeatherApplication
@@ -25,6 +25,16 @@ namespace WeatherApplication
 
 		private float _latestWindSpeed;
 
+		private float _latestFeelsLike;
+
+		private DateTime _sunrise;
+
+		private DateTime _sunset;
+
+		private int _dateTime;
+
+		private int _latestPressure;
+
 		private GPSModule _gpsmodule;
 
 		public double LatestTemperature
@@ -43,103 +53,67 @@ namespace WeatherApplication
 
 		public float LatestWindSpeed { get { return _latestWindSpeed; } set { _latestWindSpeed = value; OnPropertyChanged(); } }
 
+		public float LatestFeelsLike { get { return _latestFeelsLike; } set { _latestFeelsLike = value; OnPropertyChanged(); } }
 
-		public ICommand NewTemperatureCommand { get; set; }
-		public ICommand NewHumidityCommand { get; set; }
-		
+		public DateTime Sunrise { get { return _sunrise; } set { _sunrise = value; OnPropertyChanged(); } }
+
+		public DateTime Sunset { get { return _sunset; } set { _sunset = value; OnPropertyChanged(); } }
+
+		public int DateTime { get { return _dateTime; } set { _dateTime = value; OnPropertyChanged(); } }
+
+		public int LatestPressure { get { return _latestPressure; }set { _latestPressure= value; OnPropertyChanged(); } }	
+
 
 		public MainPage()
 		{
 			InitializeComponent();
-			NewTemperatureCommand = new Command(GetTemperature);
-			NewHumidityCommand = new Command(GetHumidity);
+			RefreshCommand = new Command(GetWeatherForecast);
 			_httpClient = new HttpClient();
 			_httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-			GetMax(_httpClient);
-			GetMin(_httpClient);
+			
 			GPSModule module = new GPSModule();
 			BindingContext = this;
 
 		}
 
+		public ICommand RefreshCommand { get; set; }
 
-
-		public async void GetTemperature(object parameters)
+		public async void GetWeatherForecast(object parameters)
 		{
-			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
-			WeatherInfo responseTemperature = JsonConvert.DeserializeObject<WeatherInfo>(response);
+			
 
-			if (responseTemperature != null)
+			Location location = await _gpsmodule.GetCurrentLocation();
+			double lat = location.Latitude;
+			double lon = location.Longitude;
+
+			string appId = "1f7b0a77bf23fecae05e9c7c63d98867";
+			string response = await _httpClient.GetStringAsync(new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}.99&appid={appId}&units=metric"));
+
+			WeatherInfo responseWeather = JsonConvert.DeserializeObject<WeatherInfo>(response);
+
+			if (responseWeather != null)
 			{
-				LatestTemperature = responseTemperature.main.temp;
-			}
-		}
-
-		public async void GetHumidity(object parameters)
-		{
-			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
-			WeatherInfo responseHumidity = JsonConvert.DeserializeObject<WeatherInfo>(response);
-
-			if (responseHumidity != null)
-			{
-				LatestHumidity = responseHumidity.main.humidity;
-			}
-		}
-
-		public async void GetMax(object parameters)
-		{
-			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
-			WeatherInfo responseMax = JsonConvert.DeserializeObject<WeatherInfo>(response);
-
-			if (responseMax != null)
-			{
-				LatestMax = responseMax.main.temp_max;
-			}
-		}
-
-		public async void GetMin(object parameters)
-		{
-			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
-			WeatherInfo responseMin = JsonConvert.DeserializeObject<WeatherInfo>(response);
-
-			if (responseMin != null)
-			{
-				LatestMin = responseMin.main.temp_min;
-			}
-		}
-
-		public async void GetDescription(object parameters)
-		{
-			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
-			WeatherInfo responseDescription = JsonConvert.DeserializeObject<WeatherInfo>(response);
-			if (responseDescription != null)
-			{
-
-				if (responseDescription.weather.Count() >= 0)
+				 LatestTemperature=(int)Math.Round(responseWeather.main.temp);
+				 LatestWindSpeed=responseWeather.wind.speed;
+				 LatestMax= responseWeather.main.temp_max;
+				 LatestMin = responseWeather.main.temp_min;
+				 LatestHumidity = responseWeather.main.humidity;
+				 LatestFeelsLike= responseWeather.main.feels_like;
+				 LatestPressure= responseWeather.main.pressure;
+				 
+				if(responseWeather.weather.Count() >= 0)
 				{
-					LatestDescription = responseDescription.weather[0].description;
-
+					LatestDescription= responseWeather.weather[0].description.ToUpper();
 				}
+
+				DateTimeOffset dtOffset = DateTimeOffset.FromUnixTimeSeconds(responseWeather.sys.sunrise);
+				Sunrise = dtOffset.UtcDateTime;
+				_ = DateTimeOffset.FromUnixTimeSeconds(responseWeather.sys.sunset);
+				Sunset = dtOffset.UtcDateTime; 
+
 				
-
-
-
-
 			}
 		}
-
-		public async void GetWindSpeed(object parameters)
-		{
-			string response = await _httpClient.GetStringAsync(new Uri("https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
-			WeatherInfo responseWindSpeed = JsonConvert.DeserializeObject<WeatherInfo>(response);
-
-			if (responseWindSpeed != null)
-			{
-				LatestWindSpeed = responseWindSpeed.wind.speed;
-			}
-
-		}
-
 	}
 }
 		

@@ -11,8 +11,9 @@ namespace WeatherApplication
 		private CancellationTokenSource _cancelTokenSource;
 		private bool _isCheckingLocation;
 
-		public async Task GetCurrentLocation()
+		public async Task<Location> GetCurrentLocation()
 		{
+			Location location= null;
 			try
 			{
 				_isCheckingLocation = true;
@@ -21,7 +22,7 @@ namespace WeatherApplication
 
 				_cancelTokenSource = new CancellationTokenSource();
 
-				Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token);
+				 location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token);
 
 				if (location != null)
 					Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
@@ -38,6 +39,8 @@ namespace WeatherApplication
 			{
 				_isCheckingLocation = false;
 			}
+
+			return location;
 		}
 
 		public void CancelRequest()
