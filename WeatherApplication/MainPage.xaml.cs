@@ -76,14 +76,15 @@ namespace WeatherApplication
 		public MainPage()
 		{
 			 InitializeComponent();
-			 GetWeatherForecast(_httpClient);
+			 Refresh = new Command(GetWeatherForecast);
 			_httpClient = new HttpClient();
 			_httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-			GPSModule module = new GPSModule();
+			_gpsmodule = new GPSModule();
 			BindingContext = this;
 
 		}
 
+		public ICommand Refresh { get; set; }
 		
 
 		public async void GetWeatherForecast(object parameters)
@@ -96,7 +97,7 @@ namespace WeatherApplication
 				double lon = location.Longitude;
 
 				string appId = "1f7b0a77bf23fecae05e9c7c63d98867";
-				string response = await _httpClient.GetStringAsync(new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={appId}&units=metric"));
+				string response = await _httpClient.GetStringAsync(new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid=1f7b0a77bf23fecae05e9c7c63d98867&units=metric"));
 
 				WeatherInfo responseWeather = JsonConvert.DeserializeObject<WeatherInfo>(response);
 
@@ -111,9 +112,10 @@ namespace WeatherApplication
 					LatestPressure = responseWeather.main.pressure;
 				    Country=responseWeather.sys.country;
 				    CloudCoverage = responseWeather.clouds.all;
-				    DateTimeOffset dtOffset = DateTimeOffset.FromUnixTimeSeconds(responseWeather.sys.sunrise);
+				    DateTimeOffset dtOffset= DateTimeOffset.FromUnixTimeSeconds(responseWeather.sys.sunrise);
 				    Sunrise = dtOffset.UtcDateTime.ToString();
-				          _ = DateTimeOffset.FromUnixTimeSeconds(responseWeather.sys.sunset);
+				    
+				    dtOffset = DateTimeOffset.FromUnixTimeSeconds(responseWeather.sys.sunset);
 				    Sunset = dtOffset.UtcDateTime.ToString();
 
 				if (responseWeather.weather.Count() >= 0)

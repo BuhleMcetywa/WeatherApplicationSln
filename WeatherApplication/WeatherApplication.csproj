@@ -57,6 +57,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\backgroundimage.jpg" />
+	  <None Remove="Resources\Images\barometer.png" />
+	  <None Remove="Resources\Images\cloudcoverage.jpeg" />
+	  <None Remove="Resources\Images\humidity.png" />
+	  <None Remove="Resources\Images\sunrise.png" />
+	  <None Remove="Resources\Images\sunset.png" />
+	  <None Remove="Resources\Images\thermometer.png" />
+	  <None Remove="Resources\Images\weatherapp.mp4" />
+	  <None Remove="Resources\Images\weatherappbackgroundimage.gif" />
+	  <None Remove="Resources\Images\wind.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />

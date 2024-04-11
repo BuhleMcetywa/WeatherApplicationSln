@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:WeatherApplication"
              x:Class="WeatherApplication.MainPage" x:DataType="local:MainPage"
-              >
+             BackgroundImageSource="backgroundimage.png"
+    
+             >
 
-<ContentPage.Resources>
+    <ContentPage.Resources>
     <ResourceDictionary>
         <Style x:Key="labelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="Small" />
@@ -47,7 +49,7 @@
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
             <Label
                     FontSize="20"
-                    Text="Cape Town"
+                    Text="Cape Town,  "
                     TextColor="White"
                     VerticalOptions="Center" />
             <Label
@@ -100,13 +102,7 @@
                 HorizontalOptions="Center"
                 Text="{Binding DateUpdate}"
                 TextColor="White" />
-        <Label
-                FontSize="20"
-                Text="Weather Forecast"
-                HorizontalOptions="Start"
-                Margin="0,20,580,0"
-                FontAttributes="Bold"
-                TextColor="Black"/>
+       
 
     </StackLayout>
 
@@ -136,7 +132,7 @@
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     Spacing="10">
-                <Image Source="humidity3.jpg"
+                <Image Source="humidity.png"
                           HeightRequest="80"
                            WidthRequest="80"/>
                 <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
@@ -159,7 +155,7 @@
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     Spacing="10">
-                <Image Source="wind2.png"
+                <Image Source="wind.png"
                            HeightRequest="80"
                            WidthRequest="50"/>
                 <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
@@ -182,7 +178,7 @@
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     Spacing="10">
-                <Image Source="press.png"
+                <Image Source="barometer.png"
                            HeightRequest="80"
                            WidthRequest="80"/>
                 <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
@@ -205,7 +201,7 @@
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     Spacing="10">
-                <Image Source="cloudycover.png"
+                <Image Source="cloudcoverage.jpeg"
                            HeightRequest="80"
                            WidthRequest="80"/>
                 <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
@@ -229,12 +225,7 @@
         </Grid>
     </Frame>
 
-    <Label 
-            Grid.Row="3" 
-            Text="Miscellaneous Data" 
-            FontSize="20" 
-            FontAttributes="Bold" 
-            Margin="20,20,0,0"/>
+
 
     <Frame
             Grid.Row="4"
@@ -262,7 +253,7 @@
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Vertical"
                     Spacing="10">
-                <Image Source="honest.png"
+                <Image Source="thermometer.png"
                            HeightRequest="80"
                            WidthRequest="80"/>
                 <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
@@ -330,10 +321,18 @@
             Grid.Row="5"
             Margin="0,40,0,0"
             Orientation="Horizontal">
+            <Button 
+               Text="Refresh"
+               Command="{Binding Refresh}"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="Aqua"/>
 
-        
-    </StackLayout>
-    <ActivityIndicator x:Name="activityindicator" IsRunning="False" IsVisible="False" Margin="0,-140,320,0" Color="LightBlue"/>
-</Grid>
+
+        </StackLayout>
+
+       
+    </Grid>
+
+   
 
 </ContentPage>
